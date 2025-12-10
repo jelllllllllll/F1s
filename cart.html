@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - ATELIER YAS MARINA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --accent-black: #1A1A1A;
+            --formula-red: #DC143C;
+            --neutral-gray: #6C757D;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-white);
+            color: var(--accent-black);
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .btn-primary {
+            background: var(--accent-black);
+            color: var(--primary-white);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--formula-red);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 20, 60, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--primary-white);
+            color: var(--accent-black);
+            border: 2px solid var(--accent-black);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--accent-black);
+            color: var(--primary-white);
+            transform: translateY(-2px);
+        }
+        
+        .sticky-nav {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .cart-counter {
+            background: var(--formula-red);
+            color: white;
+            font-size: 0.75rem;
+            min-width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        .cart-item {
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            width: fit-content;
+        }
+        
+        .quantity-btn {
+            padding: 0.5rem 0.75rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .quantity-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        .quantity-input {
+            width: 3rem;
+            text-align: center;
+            border: none;
+            background: none;
+            padding: 0.5rem;
+        }
+        
+        .checkout-form {
+            background: var(--light-gray);
+            border-radius: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--accent-black);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--formula-red);
+        }
+        
+        .form-input.error {
+            border-color: var(--formula-red);
+        }
+        
+        .error-message {
+            color: var(--formula-red);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        .payment-method {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method:hover {
+            border-color: var(--formula-red);
+        }
+        
+        .payment-method.selected {
+            border-color: var(--formula-red);
+            background: rgba(220, 20, 60, 0.05);
+        }
+        
+        .order-summary {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        
+        .success-modal {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background: white;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid var(--formula-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="sticky-nav fixed top-0 left-0 right-0 z-50 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="font-display text-2xl font-bold">
+                     <a href="index.html">ATELIER YAS MARINA </a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium">Home</a>
+                    <a href="catalog.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium">Catalog</a>
+                    <a href="cart.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium relative">
+                        Cart
+                        <span id="cart-counter" class="cart-counter absolute -top-2 -right-2 rounded-full flex items-center justify-center hidden">0</span>
+                    </a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-red-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-2 space-y-2">
+                <a href="index.html" class="block py-2 text-gray-700">Home</a>
+                <a href="catalog.html" class="block py-2 text-gray-700">Catalog</a>
+                <a href="cart.html" class="block py-2 text-gray-900 font-medium">Cart</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="pt-24 pb-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="font-display text-4xl md:text-6xl font-bold mb-4">Shopping Cart</h1>
+            <p class="text-xl text-gray-600">Review your items and proceed to checkout</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div id="empty-cart" class="text-center py-20 hidden">
+            <div class="max-w-md mx-auto">
+                <svg class="w-24 h-24 text-gray-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9m-9 0h9"></path>
+                </svg>
+                <h2 class="font-display text-3xl font-bold mb-4">Your cart is empty</h2>
+                <p class="text-gray-600 mb-8">Discover amazing Formula 1 merchandise from official teams and creators</p>
+                <a href="catalog.html" class="btn-primary px-8 py-4 rounded-none font-semibold text-lg inline-block">
+                    Start Shopping
+                </a>
+            </div>
+        </div>
+
+        <div id="cart-content" class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <!-- Cart Items -->
+            <div class="lg:col-span-2">
+                <h2 class="font-display text-2xl font-semibold mb-6">Cart Items</h2>
+                <div id="cart-items" class="space-y-6">
+                    <!-- Cart items will be populated by JavaScript -->
+                </div>
+                
+                <div class="mt-8 pt-6 border-t">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-semibold">Subtotal</span>
+                        <span class="text-2xl font-bold" id="cart-subtotal">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="order-summary p-6 sticky top-24">
+                    <h2 class="font-display text-2xl font-semibold mb-6">Order Summary</h2>
+                    
+                    <!-- Cart Items -->
+                    <div id="cart-summary-items" class="mb-6 max-h-64 overflow-y-auto">
+                        <!-- Items will be populated by JavaScript -->
+                    </div>
+                    
+                    <!-- Order Totals -->
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between">
+                            <span>Subtotal</span>
+                            <span id="summary-subtotal">$0.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Shipping</span>
+                            <span id="summary-shipping">$9.99</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Tax</span>
+                            <span id="summary-tax">$0.00</span>
+                        </div>
+                        <hr class="my-2">
+                        <div class="flex justify-between font-bold text-lg">
+                            <span>Total</span>
+                            <span id="summary-total">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Promo Code -->
+                    <div class="mb-6">
+                        <div class="flex gap-2">
+                            <input type="text" class="form-input flex-1" placeholder="Promo code" id="promo-code">
+                            <button class="btn-secondary px-4 py-2 text-sm" id="apply-promo">Apply</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Checkout Button -->
+                   <button
+  id="proceed-checkout"
+  type="button"
+  class="btn-primary w-full py-4 rounded-none font-semibold text-lg mb-4"
+>
+  Proceed to Checkout
+</button>
+
+                    
+                    <!-- Continue Shopping -->
+                    <div class="text-center">
+                        <a href="catalog.html" class="text-sm text-gray-600 hover:text-red-600">
+                            Continue Shopping
+                        </a>
+                    </div>
+                    
+                    <div class="text-xs text-gray-500 text-center mt-4">
+                        Secure checkout with SSL encryption
+                    </div>
+                </div>
+                
+                <!-- Security Badges -->
+                <div class="mt-6 text-center">
+                    <div class="flex justify-center items-center gap-4 text-sm text-gray-600">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            <span>SSL Secured</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>PCI Compliant</span>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="success-modal fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="modal-content rounded-lg shadow-2xl max-w-md w-full">
+            <div class="p-8 text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                
+                <h3 class="font-display text-2xl font-bold mb-4">Payment Successful!</h3>
+                <p class="text-gray-600 mb-6">Your order has been placed successfully. You will receive a confirmation email shortly.</p>
+                
+                <div class="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>Order Number:</span>
+                            <span class="font-mono" id="order-number">#F1M-2024-001</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Tracking Number:</span>
+                            <span class="font-mono" id="tracking-number">TRK123456789</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Total Paid:</span>
+                            <span class="font-bold" id="total-paid">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-3">
+                    <button class="btn-primary w-full py-3 rounded-none font-semibold" id="continue-shopping">
+                        Continue Shopping
+                    </button>
+                    <button class="btn-secondary w-full py-3 rounded-none font-semibold" id="track-order">
+                        Track Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="text-center">
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="text-lg font-semibold">Processing Payment...</p>
+            <p class="text-gray-600">Please wait while we secure your order</p>
+        </div>
+    </div>
+
+       <!-- Footer -->
+<footer class="bg-black text-white py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+        <h2 class="font-display text-3xl font-semibold tracking-wide mb-3">
+            ATELIER YAS MARINA
+        </h2>
+
+        <p class="text-gray-400 text-sm mb-2">
+            © <span id="footer-year"></span> Atelier Yas Marina. All rights reserved.
+        </p>
+
+        <p class="text-gray-500 text-xs opacity-80">
+            Prototype for demonstration purposes
+        </p>
+
+    </div>
+</footer>
+
+<script>
+    // Auto-year
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
+</script>
+
+    <script src="main.js"></script>
+</body>
+</html>

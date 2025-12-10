@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "cart": "Cart"
+  },
+  "hero": {
+    "headline": "Formula 1 Marketplace",
+    "subheadline": "Official & Creator Merchandise",
+    "cta_official": "Explore Official",
+    "cta_creator": "Explore Creator",
+    "description": "Discover authentic Formula 1 merchandise from official teams and independent creators"
+  },
+  "benefits": {
+    "verified": {
+      "title": "Verified Official",
+      "description": "100% authentic merchandise from official F1 teams"
+    },
+    "curated": {
+      "title": "Curated Creator Drops",
+      "description": "Exclusive designs from talented F1 fan artists"
+    },
+    "secure": {
+      "title": "Secure Checkout",
+      "description": "Multiple payment options with buyer protection"
+    },
+    "shipping": {
+      "title": "Fast Shipping",
+      "description": "Worldwide delivery with tracking"
+    }
+  },
+  "catalog": {
+    "title": "Product Catalog",
+    "filters": {
+      "channel": "Channel",
+      "official": "Official",
+      "creator": "Creator",
+      "team": "Team",
+      "category": "Category",
+      "price": "Price Range",
+      "sort": "Sort By",
+      "popular": "Popular",
+      "newest": "Newest",
+      "price_low": "Price: Low to High",
+      "price_high": "Price: High to Low",
+      "editors_pick": "Editor's Pick"
+    },
+    "quick_view": "Quick View",
+    "add_to_cart": "Add to Cart"
+  },
+  "product": {
+    "official_badge": "Official Team Merchandise",
+    "creator_badge": "Creator Made",
+    "limited_badge": "Limited Edition",
+    "new_badge": "New",
+    "in_stock": "In Stock",
+    "out_of_stock": "Out of Stock",
+    "quantity": "Quantity",
+    "buy_now": "Buy Now",
+    "add_to_cart": "Add to Cart",
+    "description": "Description",
+    "related_products": "Related Products",
+    "royalty_info": "Royalty Percentage",
+    "vendor_info": "Sold by"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "continue_shopping": "Continue Shopping",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "remove": "Remove",
+    "update": "Update Quantity"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "contact_info": "Contact Information",
+    "shipping_address": "Shipping Address",
+    "payment_method": "Payment Method",
+    "card_payment": "Credit/Debit Card",
+    "paypal": "PayPal",
+    "crypto": "Cryptocurrency",
+    "place_order": "Place Order",
+    "order_summary": "Order Summary"
+  },
+  "payment": {
+    "success": "Payment Successful",
+    "success_message": "Your order has been placed successfully",
+    "order_number": "Order Number",
+    "tracking_number": "Tracking Number",
+    "email_confirmation": "Email confirmation sent",
+    "failure": "Payment Failed",
+    "try_again": "Please try again"
+  },
+  "footer": {
+    "copyright": "© 2024 Formula 1 Marketplace",
+    "prototype": "Prototype for demonstration purposes"
+  }
+}

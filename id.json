@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "catalog": "Katalog",
+    "cart": "Keranjang"
+  },
+  "hero": {
+    "headline": "Formula 1 Marketplace",
+    "subheadline": "Merchandise Resmi & Kreator",
+    "cta_official": "Jelajahi Resmi",
+    "cta_creator": "Jelajahi Kreator",
+    "description": "Temukan merchandise Formula 1 asli dari tim resmi dan kreator independen"
+  },
+  "benefits": {
+    "verified": {
+      "title": "Terverifikasi Resmi",
+      "description": "Merchandise 100% asli dari tim F1 resmi"
+    },
+    "curated": {
+      "title": "Koleksi Kreator Pilihan",
+      "description": "Desain eksklusif dari seniman fan F1 berbakat"
+    },
+    "secure": {
+      "title": "Checkout Aman",
+      "description": "Berbagai pilihan pembayaran dengan perlindungan pembeli"
+    },
+    "shipping": {
+      "title": "Pengiriman Cepat",
+      "description": "Pengiriman worldwide dengan pelacakan"
+    }
+  },
+  "catalog": {
+    "title": "Katalog Produk",
+    "filters": {
+      "channel": "Channel",
+      "official": "Resmi",
+      "creator": "Kreator",
+      "team": "Tim",
+      "category": "Kategori",
+      "price": "Rentang Harga",
+      "sort": "Urutkan",
+      "popular": "Populer",
+      "newest": "Terbaru",
+      "price_low": "Harga: Rendah ke Tinggi",
+      "price_high": "Harga: Tinggi ke Rendah",
+      "editors_pick": "Pilihan Editor"
+    },
+    "quick_view": "Lihat Cepat",
+    "add_to_cart": "Tambah ke Keranjang"
+  },
+  "product": {
+    "official_badge": "Merchandise Tim Resmi",
+    "creator_badge": "Buatan Kreator",
+    "limited_badge": "Edisi Terbatas",
+    "new_badge": "Baru",
+    "in_stock": "Tersedia",
+    "out_of_stock": "Stok Habis",
+    "quantity": "Jumlah",
+    "buy_now": "Beli Sekarang",
+    "add_to_cart": "Tambah ke Keranjang",
+    "description": "Deskripsi",
+    "related_products": "Produk Terkait",
+    "royalty_info": "Persentase Royalti",
+    "vendor_info": "Dijual oleh"
+  },
+  "cart": {
+    "title": "Keranjang Belanja",
+    "empty": "Keranjang Anda kosong",
+    "continue_shopping": "Lanjutkan Belanja",
+    "subtotal": "Subtotal",
+    "shipping": "Pengiriman",
+    "total": "Total",
+    "checkout": "Lanjutkan ke Checkout",
+    "remove": "Hapus",
+    "update": "Perbarui Jumlah"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "contact_info": "Informasi Kontak",
+    "shipping_address": "Alamat Pengiriman",
+    "payment_method": "Metode Pembayaran",
+    "card_payment": "Kartu Kredit/Debit",
+    "paypal": "PayPal",
+    "crypto": "Cryptocurrency",
+    "place_order": "Pesan Sekarang",
+    "order_summary": "Ringkasan Pesanan"
+  },
+  "payment": {
+    "success": "Pembayaran Berhasil",
+    "success_message": "Pesanan Anda telah berhasil dipesan",
+    "order_number": "Nomor Pesanan",
+    "tracking_number": "Nomor Pelacakan",
+    "email_confirmation": "Konfirmasi email dikirim",
+    "failure": "Pembayaran Gagal",
+    "try_again": "Silakan coba lagi"
+  },
+  "footer": {
+    "copyright": "© 2024 Formula 1 Marketplace",
+    "prototype": "Prototype untuk tujuan demonstrasi"
+  }
+}

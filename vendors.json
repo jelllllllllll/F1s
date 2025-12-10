@@ -1,0 +1,65 @@
+[
+  {
+    "vendor_id": "ferrari-official",
+    "name": "Scuderia Ferrari",
+    "vendor_type": "official",
+    "verification_info": "Official F1 Team Merchandise",
+    "bio": "The most successful team in Formula 1 history, racing since 1950. Official merchandise directly from Maranello."
+  },
+  {
+    "vendor_id": "mercedes-official",
+    "name": "Mercedes-AMG F1 Team",
+    "vendor_type": "official",
+    "verification_info": "Official F1 Team Merchandise",
+    "bio": "Eight-time Constructors' Champions with a legacy of engineering excellence and technological innovation."
+  },
+  {
+    "vendor_id": "redbull-official",
+    "name": "Red Bull Racing",
+    "vendor_type": "official",
+    "verification_info": "Official F1 Team Merchandise",
+    "bio": "Six-time Constructors' Champions known for pushing the boundaries of F1 technology and design."
+  },
+  {
+    "vendor_id": "mclaren-official",
+    "name": "McLaren F1 Team",
+    "vendor_type": "official",
+    "verification_info": "Official F1 Team Merchandise",
+    "bio": "Nine-time Constructors' Champions with over 50 years of racing heritage and innovation."
+  },
+  {
+    "vendor_id": "racingart-studio",
+    "name": "RacingArt Studio",
+    "vendor_type": "creator",
+    "verification_info": "Verified Creator Partner",
+    "bio": "Independent artist specializing in Formula 1 inspired digital art and contemporary racing designs."
+  },
+  {
+    "vendor_id": "speedcraft-leather",
+    "name": "SpeedCraft Leather",
+    "vendor_type": "creator",
+    "verification_info": "Verified Creator Partner",
+    "bio": "Artisan leatherworker creating handcrafted F1-themed accessories and premium racing-inspired goods."
+  },
+  {
+    "vendor_id": "racing-collectibles",
+    "name": "Racing Collectibles",
+    "vendor_type": "creator",
+    "verification_info": "Verified Creator Partner",
+    "bio": "Specializing in limited edition F1 collectibles and scale model replicas for serious collectors."
+  },
+  {
+    "vendor_id": "circuitdesign-co",
+    "name": "CircuitDesign Co",
+    "vendor_type": "creator",
+    "verification_info": "Verified Creator Partner",
+    "bio": "Design studio creating minimalist F1 circuit maps and racing-inspired graphic artwork."
+  },
+  {
+    "vendor_id": "mobileart-designs",
+    "name": "MobileArt Designs",
+    "vendor_type": "creator",
+    "verification_info": "Verified Creator Partner",
+    "bio": "Custom phone case designer specializing in personalized motorsport and F1 driver artwork."
+  }
+]

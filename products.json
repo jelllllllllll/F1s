@@ -1,0 +1,239 @@
+[
+  {
+    "id": "ferrari-cap-001",
+    "title": "Scuderia Ferrari Team Cap 2024",
+    "vendor_type": "official",
+    "team": "Ferrari",
+    "price": 89.99,
+    "currency": "USD",
+    "images": ["resources/product-ferrari-cap.jpg"],
+    "variants": [
+      {"id": "s", "label": "S", "stock": 15},
+      {"id": "m", "label": "M", "stock": 8},
+      {"id": "l", "label": "L", "stock": 12},
+      {"id": "xl", "label": "XL", "stock": 5}
+    ],
+    "stock_total": 40,
+    "description": "Official Scuderia Ferrari team cap featuring the iconic prancing horse logo. Made from premium materials with adjustable fit. Perfect for showing your support for the most successful team in Formula 1 history.",
+    "badges": ["official", "new"],
+    "category": "accessories",
+    "sku": "SF-CAP-2024-001"
+  },
+  {
+    "id": "mercedes-hoodie-002",
+    "title": "Mercedes-AMG F1 Team Hoodie",
+    "vendor_type": "official",
+    "team": "Mercedes",
+    "price": 149.99,
+    "currency": "USD",
+    "images": ["resources/merc.jpg"],
+    "variants": [
+      {"id": "s", "label": "S", "stock": 10},
+      {"id": "m", "label": "M", "stock": 6},
+      {"id": "l", "label": "L", "stock": 8},
+      {"id": "xl", "label": "XL", "stock": 3}
+    ],
+    "stock_total": 27,
+    "description": "Premium Mercedes-AMG Petronas F1 Team hoodie in team colors. Features the Mercedes three-pointed star logo and official team branding. Comfortable fleece interior with durable construction.",
+    "badges": ["official", "limited"],
+    "category": "apparel",
+    "sku": "MB-HOODIE-2024-002"
+  },
+  {
+    "id": "redbull-shirt-003",
+    "title": "Red Bull Racing Max Verstappen T-Shirt",
+    "vendor_type": "official",
+    "team": "Red Bull Racing",
+    "price": 79.99,
+    "currency": "USD",
+    "images": ["resources/max.jpeg"],
+    "variants": [
+      {"id": "s", "label": "S", "stock": 20},
+      {"id": "m", "label": "M", "stock": 25},
+      {"id": "l", "label": "L", "stock": 18},
+      {"id": "xl", "label": "XL", "stock": 12}
+    ],
+    "stock_total": 75,
+    "description": "Official Red Bull Racing t-shirt featuring Max Verstappen's driver number and team graphics. Made from breathable cotton with modern fit design. Support the four-time world champion in style.",
+    "badges": ["official"],
+    "category": "apparel",
+    "sku": "RB-SHIRT-2024-003"
+  },
+  {
+    "id": "mclaren-jacket-004",
+    "title": "McLaren F1 Team Jacket",
+    "vendor_type": "official",
+    "team": "McLaren",
+    "price": 199.99,
+    "currency": "USD",
+    "images": ["resources/McLaren Jacket F1.webp"],
+    "variants": [
+      {"id": "s", "label": "S", "stock": 7},
+      {"id": "m", "label": "M", "stock": 12},
+      {"id": "l", "label": "L", "stock": 9},
+      {"id": "xl", "label": "XL", "stock": 4}
+    ],
+    "stock_total": 32,
+    "description": "Professional McLaren F1 Team jacket in iconic papaya orange. Features waterproof construction, team sponsor logos, and driver signatures printed inside. Limited edition collector's item.",
+    "badges": ["official", "limited", "new"],
+    "category": "outerwear",
+    "sku": "MC-JACKET-2024-004"
+  },
+  {
+    "id": "fanart-print-005",
+    "title": "Abstract F1 Racing Art Print",
+    "vendor_type": "creator",
+    "creator_name": "RacingArt Studio",
+    "price": 45.99,
+    "currency": "USD",
+    "images": ["resources/artmona.png"],
+    "variants": [
+      {"id": "a4", "label": "A4", "stock": 50},
+      {"id": "a3", "label": "A3", "stock": 30},
+      {"id": "a2", "label": "A2", "stock": 15}
+    ],
+    "stock_total": 95,
+    "description": "Stunning abstract Formula 1 art print featuring dynamic racing elements in a modern minimalist style. Printed on high-quality archival paper with vibrant colors. Perfect for any F1 fan's collection.",
+    "badges": ["creator", "limited"],
+    "category": "art",
+    "sku": "FA-PRINT-005",
+    "royalty_percent": 70
+  },
+  {
+    "id": "keychain-006",
+    "title": "Handcrafted F1 Leather Keychain",
+    "vendor_type": "creator",
+    "creator_name": "SpeedCraft Leather",
+    "price": 24.99,
+    "currency": "USD",
+    "images": ["resources/product-keychain.jpg"],
+    "variants": [
+      {"id": "brown", "label": "Brown Leather", "stock": 25},
+      {"id": "black", "label": "Black Leather", "stock": 30}
+    ],
+    "stock_total": 55,
+    "description": "Premium handcrafted leather keychain inspired by Formula 1 racing. Made from genuine leather with racing-inspired design elements. Each piece is individually crafted with attention to detail.",
+    "badges": ["creator", "handmade"],
+    "category": "accessories",
+    "sku": "SC-KEYCHAIN-006",
+    "royalty_percent": 60
+  },
+  {
+    "id": "helmet-007",
+    "title": "Limited Edition F1 Mini Helmet",
+    "vendor_type": "creator",
+    "creator_name": "Racing Collectibles",
+    "price": 129.99,
+    "currency": "USD",
+    "images": ["resources/product-helmet.jpg"],
+    "variants": [
+      {"id": "standard", "label": "Standard Edition", "stock": 20},
+      {"id": "chrome", "label": "Chrome Edition", "stock": 10}
+    ],
+    "stock_total": 30,
+    "description": "Highly detailed 1:5 scale Formula 1 helmet replica with custom racing livery. Features authentic details including visor, air intakes, and sponsor decals. Limited production run of only 100 pieces worldwide.",
+    "badges": ["creator", "limited", "collectible"],
+    "category": "collectibles",
+    "sku": "RC-HELMET-007",
+    "royalty_percent": 50
+  },
+  {
+    "id": "aston-cap-008",
+    "title": "Aston Martin F1 Team Cap",
+    "vendor_type": "official",
+    "team": "Aston Martin",
+    "price": 85.99,
+    "currency": "USD",
+    "images": ["resources/Aston Martin F1 Cap.jpg"],
+    "variants": [
+      {"id": "s", "label": "S", "stock": 12},
+      {"id": "m", "label": "M", "stock": 15},
+      {"id": "l", "label": "L", "stock": 18},
+      {"id": "xl", "label": "XL", "stock": 8}
+    ],
+    "stock_total": 53,
+    "description": "Official Aston Martin Aramco F1 Team cap featuring the iconic wing logo. Designed with premium materials and adjustable fit. Show your support for Fernando Alonso and Lance Stroll.",
+    "badges": ["official", "new"],
+    "category": "accessories",
+    "sku": "AM-CAP-2024-008"
+  },
+  {
+    "id": "digital-art-009",
+    "title": "F1 Circuit Map Digital Art",
+    "vendor_type": "creator",
+    "creator_name": "CircuitDesign Co",
+    "price": 34.99,
+    "currency": "USD",
+    "images": ["resources/product-fanart-print.jpg"],
+    "variants": [
+      {"id": "digital", "label": "Digital Download", "stock": 100},
+      {"id": "print", "label": "Printed Poster", "stock": 40}
+    ],
+    "stock_total": 140,
+    "description": "Beautiful minimalist design featuring iconic Formula 1 circuit layouts. Available as instant digital download or high-quality print. Perfect for home office or gaming setup decoration.",
+    "badges": ["creator", "digital"],
+    "category": "art",
+    "sku": "CD-ART-009",
+    "royalty_percent": 75
+  },
+  {
+    "id": "racing-gloves-010",
+    "title": "Alpine F1 Team Racing Gloves",
+    "vendor_type": "official",
+    "team": "Alpine",
+    "price": 95.99,
+    "currency": "USD",
+    "images": ["resources/Alphine Racing Gloves F1.jpg"],
+    "variants": [
+      {"id": "s", "label": "S", "stock": 8},
+      {"id": "m", "label": "M", "stock": 12},
+      {"id": "l", "label": "L", "stock": 10},
+      {"id": "xl", "label": "XL", "stock": 6}
+    ],
+    "stock_total": 36,
+    "description": "Authentic Alpine F1 Team racing gloves as worn by Pierre Gasly and Esteban Ocon. Features fire-resistant materials, team branding, and professional grip surfaces. Collector's item for serious fans.",
+    "badges": ["official", "limited"],
+    "category": "accessories",
+    "sku": "AL-GLOVES-2024-010"
+  },
+  {
+    "id": "williams-hoodie-011",
+    "title": "Williams Racing Heritage Hoodie",
+    "vendor_type": "official",
+    "team": "Williams",
+    "price": 119.99,
+    "currency": "USD",
+    "images": ["resources/will.jpg"],
+    "variants": [
+      {"id": "s", "label": "S", "stock": 14},
+      {"id": "m", "label": "M", "stock": 18},
+      {"id": "l", "label": "L", "stock": 16},
+      {"id": "xl", "label": "XL", "stock": 9}
+    ],
+    "stock_total": 57,
+    "description": "Williams Racing heritage hoodie celebrating the team's legendary history in Formula 1. Features classic Williams blue and white colors with vintage-inspired design elements. Comfortable and stylish for everyday wear.",
+    "badges": ["official", "heritage"],
+    "category": "apparel",
+    "sku": "WR-HOODIE-2024-011"
+  },
+  {
+    "id": "custom-phone-case-012",
+    "title": "Custom F1 Driver Phone Case",
+    "vendor_type": "creator",
+    "creator_name": "MobileArt Designs",
+    "price": 29.99,
+    "currency": "USD",
+    "images": ["resources/case.png"],
+    "variants": [
+      {"id": "iphone14", "label": "iPhone 14", "stock": 20},
+      {"id": "iphone15", "label": "iPhone 15", "stock": 25},
+      {"id": "samsung24", "label": "Samsung S24", "stock": 15}
+    ],
+    "stock_total": 60,
+    "description": "Custom-designed phone case featuring your favorite F1 driver or team. High-quality print with protective case. Choose from multiple designs or request custom artwork. Perfect personalized gift for F1 fans.",
+    "badges": ["creator", "customizable"],
+    "category": "accessories",
+    "sku": "MA-PHONE-012",
+    "royalty_percent": 65
+  }
+]

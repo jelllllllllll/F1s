@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog - ATELIER YAS MARINA</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+
+    <!-- Dior-like typography: Cormorant Garamond (display) + Inter (body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --accent-black: #1A1A1A;
+            --formula-red: #DC143C;
+            --neutral-gray: #6C757D;
+        }
+        
+        /* only font changes applied — all other styles preserved */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-white);
+            color: var(--accent-black);
+        }
+        
+        .font-display {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--primary-white);
+            border: 1px solid rgba(108, 117, 125, 0.1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .btn-primary {
+            background: var(--accent-black);
+            color: var(--primary-white);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--formula-red);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 20, 60, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--primary-white);
+            color: var(--accent-black);
+            border: 2px solid var(--accent-black);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--accent-black);
+            color: var(--primary-white);
+            transform: translateY(-2px);
+        }
+        
+        .sticky-nav {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .cart-counter {
+            background: var(--formula-red);
+            color: white;
+            font-size: 0.75rem;
+            min-width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        .filter-sidebar {
+            background: var(--light-gray);
+            transition: transform 0.3s ease;
+        }
+        
+        .filter-mobile {
+            transform: translateX(-100%);
+        }
+        
+        .filter-mobile.active {
+            transform: translateX(0);
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        
+        .badge-official {
+            background: var(--accent-black);
+            color: white;
+        }
+        
+        .badge-creator {
+            background: var(--formula-red);
+            color: white;
+        }
+        
+        .badge-limited {
+            background: #FFD700;
+            color: var(--accent-black);
+        }
+        
+        .badge-new {
+            background: #28A745;
+            color: white;
+        }
+        
+        .quick-view-modal {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background: white;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        
+
+        /* Compact clean buttons for catalog cards */
+.product-card .btn-primary,
+.product-card .btn-secondary {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 6px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Primary – dark filled */
+.product-card .btn-primary {
+    background: var(--accent-black);
+    color: #fff;
+    border: none;
+    transition: all .2s ease;
+}
+
+.product-card .btn-primary:hover {
+    background: #bfa86a;                    /* gold-ish Dior accent */
+    color: #000;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+}
+
+/* Secondary – outline */
+.product-card .btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(0,0,0,0.15);
+    color: var(--accent-black);
+}
+
+.product-card .btn-secondary:hover {
+    background: rgba(0,0,0,0.05);
+    border-color: rgba(0,0,0,0.25);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.10);
+}
+
+/* Dior-style catalog header */
+.catalog-hero {
+  padding-top: 6.5rem; /* pt-24 */
+  padding-bottom: 3.5rem; /* pb-12 */
+  background: #f6f7f7; /* soft neutral */
+}
+
+.catalog-hero .container {
+  max-width: 64rem; /* 1024px ~ max-w-5xl */
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-align: left;
+}
+
+/* small uppercase kicker */
+.catalog-hero .kicker {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7b7f82;
+  margin-bottom: 0.9rem;
+}
+
+/* main display heading */
+.catalog-hero .title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.4rem; /* large editorial */
+  line-height: 1.02;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #0b0b0b;
+  margin: 0 0 0.6rem 0;
+  word-break: keep-all;
+}
+
+/* subtle divider under heading */
+.catalog-hero .hairline {
+  width: 72px;
+  height: 1px;
+  background: rgba(11,11,11,0.06);
+  margin: 0.8rem 0 1.2rem 0;
+}
+
+/* subheading paragraph */
+.catalog-hero .lead {
+  font-family: 'Inter', sans-serif;
+  color: #61666a;
+  font-size: 1.05rem;
+  max-width: 56rem; /* constrain line length */
+  margin: 0;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* responsive tweaks */
+@media (min-width: 1024px) {
+  .catalog-hero .title { font-size: 4.6rem; } /* md larger like Dior */
+  .catalog-hero .lead { font-size: 1.125rem; }
+}
+
+@media (max-width: 640px) {
+  .catalog-hero .title { font-size: 2.2rem; text-align:center; }
+  .catalog-hero .container { text-align:center; }
+  .catalog-hero .kicker { text-align:center; }
+  .catalog-hero .lead { text-align:center; }
+}
+
+
+/* ====== Dior-style catalog: editorial, airy, premium ====== */
+
+/* Palette tweaks */
+:root {
+  --dior-bg: #f6f7f7;
+  --dior-panel: #ffffff;
+  --dior-text: #0b0b0b;
+  --dior-muted: #666b6e;
+  --dior-accent: #bfa86a; /* subtle gold */
+  --dior-shadow: rgba(10,10,10,0.06);
+}
+
+/* Page container */
+.max-w-7xl { max-width: 1120px; }
+
+/* Sidebar panel — lighter, softer corner, subtle border */
+.filter-sidebar {
+  background: var(--dior-panel);
+  border: 1px solid rgba(11,11,11,0.04);
+  box-shadow: 0 8px 30px rgba(11,11,11,0.03);
+  padding: 1.5rem;
+  border-radius: 10px;
+}
+
+/* Sidebar headings */
+.filter-sidebar h3, .filter-sidebar h4 {
+  color: var(--dior-text);
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* Checkbox / radio labels — more breathing room */
+.filter-sidebar label { display: flex; gap: .6rem; align-items: center; color: var(--dior-text); }
+
+/* Hairline divider for groups */
+.filter-sidebar .group-divider { height: 1px; background: rgba(11,11,11,0.03); margin: .9rem 0; }
+
+/* Product grid area background */
+main { background: transparent; }
+
+/* Product card — taller, cleaner, editorial */
+.product-card {
+  background: var(--dior-panel);
+  border: 1px solid rgba(11,11,11,0.04);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+  box-shadow: 0 10px 30px var(--dior-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+/* image area: keep strong aspect, subtle object-fit */
+.product-image { height: 320px; display:block; overflow:hidden; background:#fafafa; }
+.product-image img { width:100%; height:100%; object-fit:cover; transition: transform .45s ease; }
+
+/* hover lift and image zoom */
+.product-card:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(10,10,10,0.09); }
+.product-card:hover .product-image img { transform: scale(1.06); }
+
+/* Product content padding and typographic rhythm */
+.product-card .p-6 { padding: 1.25rem; display:flex; flex-direction:column; flex:1; }
+.product-card h3 { font-family: 'Cormorant Garamond', serif; color:var(--dior-text); margin: 0 0 .4rem 0; font-size: 1.05rem; }
+.product-card p { color: var(--dior-muted); margin: 0 0 .9rem 0; font-size: .95rem; }
+
+/* Badges refined */
+.badge { font-size: .72rem; padding: .28rem .5rem; border-radius: 999px; font-weight:600; display:inline-block; }
+.badge-official { background:#111; color: #fff; }
+.badge-new { background:#e6f7ea; color:#0a7a3b; }
+.badge-limited { background:#fff6e6; color:#8a5d00; }
+
+/* Card actions (buttons) — consistent, centered, couture */
+.card-actions {
+  display:flex;
+  gap:10px;
+  margin-top:auto; /* push buttons to bottom */
+  align-items:center;
+}
+
+/* make buttons identical size */
+.card-actions button {
+  min-width:110px;
+  height:40px;
+  border-radius:8px;
+  padding:0 12px;
+  font-size: .92rem;
+  font-weight:600;
+  display:inline-flex; align-items:center; justify-content:center;
+  white-space:nowrap;
+  box-sizing:border-box;
+}
+
+/* Primary (Add to Cart) */
+.card-actions .btn-primary {
+  background: var(--dior-text);
+  color:#fff;
+  border:none;
+  transition: all .18s ease;
+}
+.card-actions .btn-primary:hover {
+  background: var(--dior-accent);
+  color:#0b0b0b;
+  box-shadow: 0 18px 42px rgba(0,0,0,0.10);
+}
+
+/* Secondary (Quick View) */
+.card-actions .btn-secondary {
+  background: transparent;
+  color: var(--dior-text);
+  border: 1px solid rgba(11,11,11,0.08);
+}
+.card-actions .btn-secondary:hover {
+  background: rgba(11,11,11,0.04);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+/* Select (sort) styling — subtle */
+#sort-select {
+  border: 1px solid rgba(11,11,11,0.08);
+  padding: .5rem .75rem;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Product count small, muted */
+#product-count { color: var(--dior-muted); font-size: .95rem; }
+
+/* Load more button — subtle and centered */
+#load-more {
+  background: transparent;
+  border: 1px solid rgba(11,11,11,0.08);
+  color: var(--dior-text);
+  padding: .9rem 1.2rem;
+  border-radius: 8px;
+}
+#load-more:hover { background: rgba(11,11,11,0.04); }
+
+/* Quick view modal — centered, minimal */
+.quick-view-modal .modal-content {
+  width: min(920px, 95%);
+  background: #fff;
+  border-radius: 12px;
+  overflow:hidden;
+  box-shadow: 0 30px 80px rgba(10,10,10,0.18);
+}
+.quick-view-modal h3 { font-family: 'Cormorant Garamond', serif; }
+
+/* Responsive: sidebar becomes top sheet on small screens */
+@media (max-width: 1024px) {
+  .filter-sidebar { position: static; top: auto; margin-bottom: 1rem; }
+  .product-image { height: 260px; }
+  .card-actions { justify-content: center; gap:8px; }
+}
+@media (max-width: 420px) {
+  .product-image { height: 200px; }
+  .card-actions button { min-width: 100%; width:100%; }
+}
+/* Header positioned left to align with sidebar/filter box */
+.catalog-hero {
+  background: #f6f7f7;
+  padding-top: 4.8rem;
+  padding-bottom: 2.2rem;
+}
+
+/* Grid: left column sized to match sidebar area; right column filler */
+.catalog-hero .grid-wrap {
+  display: grid;
+  grid-template-columns: 1fr; /* mobile default stack */
+  gap: 1.5rem;
+  max-width: 1120px; /* match site container */
+  margin: 0 auto;
+  padding: 0 1rem;
+  align-items: start;
+}
+
+/* Desktop: left column fixed width (match lg sidebar width) */
+@media (min-width: 1024px) {
+  .catalog-hero .grid-wrap {
+    grid-template-columns: 320px 1fr; /* left column = sidebar width (adjust if your sidebar differs) */
+    padding-left: 0; /* left edge aligns with page edge */
+  }
+
+  /* move content to left column top-left */
+  .catalog-hero .hero-left { padding-left: 0; padding-right: 2rem; }
+  .catalog-hero .hero-right { padding-left: 2rem; }
+}
+
+/* Hero content styles (kept Dior-like, slightly more compact) */
+.catalog-hero .kicker {
+  font-family: 'Inter', sans-serif;
+  font-size: .72rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #8a8e90;
+  margin-bottom: .6rem;
+}
+
+.catalog-hero .title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.6rem;
+  line-height: 1.04;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 .45rem 0;
+}
+
+.catalog-hero .hairline {
+  width: 56px;
+  height: 1px;
+  background: rgba(11,11,11,0.05);
+  margin: 0.6rem 0 0.9rem 0;
+}
+
+.catalog-hero .lead {
+  font-family: 'Inter', sans-serif;
+  font-size: .98rem;
+  color: #5f6164;
+  line-height: 1.55;
+  max-width: 40rem;
+  opacity: .88;
+}
+
+/* Responsive: center on small screens */
+@media (max-width: 1023px) {
+  .catalog-hero .grid-wrap { grid-template-columns: 1fr; text-align: center; }
+  .catalog-hero .hero-left, .catalog-hero .hero-right { padding: 0; }
+  .catalog-hero .title { font-size: 2.0rem; }
+  .catalog-hero .lead { margin: 0 auto; }
+}
+
+
+/* ===== Centered Dior Hero ===== */
+.catalog-hero {
+  background: #f6f7f7;
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+/* Perfect center container */
+.catalog-hero .center-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+/* Kicker */
+.catalog-hero .kicker {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8a8e90;
+  margin-bottom: 0.7rem;
+}
+
+/* Heading */
+.catalog-hero .title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem;
+  line-height: 1.03;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 0.4rem;
+}
+
+/* Hairline */
+.catalog-hero .hairline {
+  width: 60px;
+  height: 1px;
+  background: rgba(11,11,11,0.08);
+  margin: 1rem auto 1.3rem auto;
+}
+
+/* Subheading */
+.catalog-hero .lead {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: #555b60;
+  line-height: 1.6;
+  max-width: 620px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+/* Responsive tuning */
+@media (min-width: 1024px) {
+  .catalog-hero .title { font-size: 3.3rem; }
+  .catalog-hero .lead { font-size: 1.06rem; }
+}
+
+@media (max-width: 640px) {
+  .catalog-hero {
+    padding-top: 4rem;
+    padding-bottom: 2.4rem;
+  }
+  .catalog-hero .title { font-size: 2.2rem; }
+}
+
+/* Make Quick View / Add to Cart labels smaller & tighter */
+.card-actions .btn-primary,
+.card-actions .btn-secondary,
+.product-card .btn-primary,
+.product-card .btn-secondary {
+  font-size: 0.90rem !important;      /* smaller label */
+  padding: 0.32rem 0.7rem !important; /* reduce horizontal padding */
+  height: 36px !important;            /* slightly shorter */
+  line-height: 1 !important;
+  letter-spacing: 0.01em !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+/* Keep primary slightly wider so "Add to Cart" never truncates */
+.card-actions .btn-primary {
+  min-width: 120px !important;
+  padding-left: 0.9rem !important;
+  padding-right: 0.9rem !important;
+}
+
+/* Quick View narrower */
+.card-actions .btn-secondary {
+  min-width: 96px !important;
+}
+
+/* Mobile: allow stacked full-width buttons */
+@media (max-width: 520px) {
+  .card-actions { flex-direction: column; gap: 8px; }
+  .card-actions button { width: 100% !important; min-width: 0 !important; font-size: 0.88rem !important; padding: .6rem .9rem !important; }
+}
+/* ==== Fix responsive card buttons: allow wrap and stack under price ==== */
+
+/* Allow actions to wrap and shrink when space tight */
+.card-actions {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;               /* allow wrapping to next line */
+  margin-top: 10px;
+}
+
+/* Make buttons compact and allowed to shrink */
+.card-actions button,
+.product-card .btn-primary,
+.product-card .btn-secondary {
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1 !important;
+  height: 36px !important;
+  padding: 0.28rem 0.7rem !important;  /* tighter */
+  font-size: 0.80rem !important;       /* smaller label */
+  border-radius: 8px !important;
+  min-width: 0 !important;             /* allow shrink */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+/* Primary slightly wider but still flexible */
+.card-actions .btn-primary {
+  min-width: 108px !important;   /* reduced from 130 */
+  padding-left: 0.9rem !important;
+  padding-right: 0.9rem !important;
+}
+
+/* Quick View narrower */
+.card-actions .btn-secondary {
+  min-width: 92px !important;
+}
+
+/* Ensure product info area allows actions to wrap without overflow */
+.product-card .p-6 {
+  display: flex !important;
+  flex-direction: column;
+  gap: 8px;
+  overflow: visible !important;
+}
+
+/* Keep price visually large but push actions below when space small */
+.product-card .price {
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin-top: 6px;
+}
+
+/* When card width is narrow, force buttons to full-width stacked */
+@media (max-width: 880px) {
+  .card-actions { justify-content: flex-start; }
+  .card-actions button { width: auto !important; }
+}
+
+/* Mobile: stack buttons full width under price */
+@media (max-width: 520px) {
+  .card-actions { flex-direction: column; }
+  .card-actions button { width: 100% !important; min-width: 0 !important; font-size: 0.9rem !important; padding: .7rem .9rem !important; }
+}
+
+/* If any overflow clipping remains in card, make container visible */
+.product-card { overflow: visible !important; }
+
+/* Make card actions compact icon-only */
+.card-actions button {
+  height: 38px !important;
+  width: 42px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0 !important; /* hide text */
+}
+
+/* Secondary (Quick View - eye) */
+.card-actions .btn-secondary {
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  background: #fff !important;
+}
+
+/* Primary (Add to Cart - cart) */
+.card-actions .btn-primary {
+  background: #111 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+/* Hover */
+.card-actions .btn-secondary:hover {
+  background: rgba(0,0,0,0.05) !important;
+}
+
+.card-actions .btn-primary:hover {
+  background: #bfa86a !important;
+  color: #000 !important;
+}
+
+/* Make icons clean */
+.card-actions svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke-width: 1.8;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="sticky-nav fixed top-0 left-0 right-0 z-50 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="font-display text-2xl font-bold">
+                    <a href="index.html">ATELIER YAS MARINA </a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium">Home</a>
+                    <a href="catalog.html" class="text-gray-900 hover:text-red-600 transition-colors font-medium">Catalog</a>
+                    <a href="cart.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium relative">
+                        Cart
+                        <span id="cart-counter" class="cart-counter absolute -top-2 -right-2 rounded-full flex items-center justify-center hidden">0</span>
+                    </a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-red-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-2 space-y-2">
+                <a href="index.html" class="block py-2 text-gray-700">Home</a>
+                <a href="catalog.html" class="block py-2 text-gray-900 font-medium">Catalog</a>
+                <a href="cart.html" class="block py-2 text-gray-700">Cart</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+   <section class="catalog-hero" aria-labelledby="catalog-heading">
+  <div class="center-wrap">
+
+<br>
+
+    <h1 id="catalog-heading" class="title font-display">
+       Discover authentic Atelier pieces and curated motorsport goods
+    </h1>
+
+  </div>
+</section>
+
+
+
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Filter Sidebar -->
+            <aside class="lg:w-1/4">
+                <div class="filter-sidebar p-6 rounded-lg sticky top-24">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-display text-2xl font-semibold">Filters</h3>
+                        <button id="clear-filters" class="text-sm text-red-600 hover:text-red-700">Clear All</button>
+                    </div>
+                    
+                    <!-- Channel Filter -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-3">Channel</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="channel" value="official" class="mr-2">
+                                <span>Official Teams</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="channel" value="creator" class="mr-2">
+                                <span>Creator Made</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Team Filter -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-3">Team</h4>
+                        <div class="space-y-2" id="team-filters">
+                            <!-- Teams will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Category Filter -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-3">Category</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="category" value="apparel" class="mr-2">
+                                <span>Apparel</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="category" value="accessories" class="mr-2">
+                                <span>Accessories</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="category" value="collectibles" class="mr-2">
+                                <span>Collectibles</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="category" value="art" class="mr-2">
+                                <span>Art & Prints</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Price Range -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-3">Price Range</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="price" value="0-50" class="mr-2">
+                                <span>$0 - $50</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="price" value="50-100" class="mr-2">
+                                <span>$50 - $100</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="price" value="100-200" class="mr-2">
+                                <span>$100 - $200</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="price" value="200+" class="mr-2">
+                                <span>$200+</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Product Grid -->
+            <main class="lg:w-3/4">
+                <!-- Sort and View Options -->
+                <div class="flex justify-between items-center mb-8">
+                    <div class="flex items-center space-x-4">
+                        <label class="font-semibold">Sort By:</label>
+                        <select id="sort-select" class="border border-gray-300 rounded px-3 py-2">
+                            <option value="popular">Popular</option>
+                            <option value="newest">Newest</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="editor">Editor's Pick</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <button id="filter-toggle" class="lg:hidden btn-secondary px-4 py-2 text-sm">
+                            Filters
+                        </button>
+                        <div class="text-sm text-gray-600">
+                            <span id="product-count">0</span> products
+                        </div>
+                    </div>
+                </div>
+
+
+                
+
+                <!-- Products Grid -->
+                <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <!-- Loading skeletons -->
+                    <div class="product-card rounded-lg overflow-hidden">
+                        <div class="product-image aspect-square loading-skeleton"></div>
+                        <div class="p-6">
+                            <div class="h-4 bg-gray-200 rounded loading-skeleton mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded loading-skeleton mb-4"></div>
+                            <div class="h-6 bg-gray-300 rounded loading-skeleton"></div>
+                        </div>
+                    </div>
+                    <div class="product-card rounded-lg overflow-hidden">
+                        <div class="product-image aspect-square loading-skeleton"></div>
+                        <div class="p-6">
+                            <div class="h-4 bg-gray-200 rounded loading-skeleton mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded loading-skeleton mb-4"></div>
+                            <div class="h-6 bg-gray-300 rounded loading-skeleton"></div>
+                        </div>
+                    </div>
+                    <div class="product-card rounded-lg overflow-hidden">
+                        <div class="product-image aspect-square loading-skeleton"></div>
+                        <div class="p-6">
+                            <div class="h-4 bg-gray-200 rounded loading-skeleton mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded loading-skeleton mb-4"></div>
+                            <div class="h-6 bg-gray-300 rounded loading-skeleton"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-12">
+                    <button id="load-more" class="btn-primary px-8 py-4 rounded-none font-semibold hidden">
+                        Load More Products
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quick-view-modal" class="quick-view-modal fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="modal-content rounded-lg shadow-2xl">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="font-display text-2xl font-semibold">Quick View</h3>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="modal-content" class="p-6">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+<footer class="bg-black text-white py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+        <h2 class="font-display text-3xl font-semibold tracking-wide mb-3">
+            ATELIER YAS MARINA
+        </h2>
+
+        <p class="text-gray-400 text-sm mb-2">
+            © <span id="footer-year"></span> Atelier Yas Marina. All rights reserved.
+        </p>
+
+        <p class="text-gray-500 text-xs opacity-80">
+            Prototype for demonstration purposes
+        </p>
+
+    </div>
+</footer>
+
+<script>
+    // Auto-year
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
+
+    
+(function(){
+  function adjustCardButtons() {
+    document.querySelectorAll('.product-card').forEach(card => {
+      const actions = card.querySelector('.card-actions');
+      const price = card.querySelector('.price') || null;
+
+      if (!actions || !price) return;
+
+      const cardWidth = card.getBoundingClientRect().width;
+
+      // If card gets narrower than ~360px, stack buttons under price
+      if (cardWidth < 360) {
+        actions.style.flexDirection = 'column';
+        actions.querySelectorAll('button').forEach(b => {
+          b.style.width = '100%';
+          b.style.minWidth = '0';
+        });
+      } else {
+        // default (row) behavior
+        actions.style.flexDirection = '';
+        actions.querySelectorAll('button').forEach(b => {
+          b.style.width = '';
+        });
+      }
+    });
+  }
+
+  // run on load and resize (debounced)
+  let t;
+  window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(adjustCardButtons, 120); });
+  document.addEventListener('DOMContentLoaded', adjustCardButtons);
+  // also call after images load (they affect card width)
+  window.addEventListener('load', adjustCardButtons);
+})();
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".card-actions .btn-secondary").forEach(btn => {
+        btn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0
+                    016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5
+                    12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+        `;
+    });
+
+    document.querySelectorAll(".card-actions .btn-primary").forEach(btn => {
+        btn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5
+                    M7 13l-2 9m12-9l2 9m-6-9v9"/>
+            </svg>
+        `;
+    });
+});
+
+
+
+
+</script>
+
+
+    <script src="main.js"></script>
+</body>
+</html>

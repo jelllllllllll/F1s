@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - ATELIER YAS MARINA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --accent-black: #1A1A1A;
+            --formula-red: #DC143C;
+            --neutral-gray: #6C757D;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-white);
+            color: var(--accent-black);
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .btn-primary {
+            background: var(--accent-black);
+            color: var(--primary-white);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--formula-red);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 20, 60, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--primary-white);
+            color: var(--accent-black);
+            border: 2px solid var(--accent-black);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--accent-black);
+            color: var(--primary-white);
+            transform: translateY(-2px);
+        }
+        
+        .sticky-nav {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .cart-counter {
+            background: var(--formula-red);
+            color: white;
+            font-size: 0.75rem;
+            min-width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        
+        .badge-official {
+            background: var(--accent-black);
+            color: white;
+        }
+        
+        .badge-creator {
+            background: var(--formula-red);
+            color: white;
+        }
+        
+        .badge-limited {
+            background: #FFD700;
+            color: var(--accent-black);
+        }
+        
+        .badge-new {
+            background: #28A745;
+            color: white;
+        }
+        
+        .product-image-main {
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        
+        .product-image-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-image-main:hover img {
+            transform: scale(1.05);
+        }
+        
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .thumbnail.active {
+            border-color: var(--formula-red);
+        }
+        
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .variant-selector {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .variant-option {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 3rem;
+            text-align: center;
+        }
+        
+        .variant-option:hover {
+            border-color: var(--formula-red);
+        }
+        
+        .variant-option.selected {
+            border-color: var(--formula-red);
+            background: var(--formula-red);
+            color: white;
+        }
+        
+        .variant-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            width: fit-content;
+        }
+        
+        .quantity-btn {
+            padding: 0.5rem 0.75rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .quantity-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        .quantity-input {
+            width: 3rem;
+            text-align: center;
+            border: none;
+            background: none;
+            padding: 0.5rem;
+        }
+        
+        .related-product {
+            transition: all 0.3s ease;
+        }
+        
+        .related-product:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stock-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .stock-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+        }
+        
+        .stock-high {
+            background: #10B981;
+        }
+        
+        .stock-medium {
+            background: #F59E0B;
+        }
+        
+        .stock-low {
+            background: #EF4444;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="sticky-nav fixed top-0 left-0 right-0 z-50 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="font-display text-2xl font-bold">
+                      ATELIER YAS MARINA
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium">Home</a>
+                    <a href="catalog.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium">Catalog</a>
+                    <a href="cart.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium relative">
+                        Cart
+                        <span id="cart-counter" class="cart-counter absolute -top-2 -right-2 rounded-full flex items-center justify-center hidden">0</span>
+                    </a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-red-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-2 space-y-2">
+                <a href="index.html" class="block py-2 text-gray-700">Home</a>
+                <a href="catalog.html" class="block py-2 text-gray-700">Catalog</a>
+                <a href="cart.html" class="block py-2 text-gray-700">Cart</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="pt-24 pb-8 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-2">
+                    <li><a href="index.html" class="text-gray-500 hover:text-gray-700">Home</a></li>
+                    <li><span class="text-gray-400">/</span></li>
+                    <li><a href="catalog.html" class="text-gray-500 hover:text-gray-700">Catalog</a></li>
+                    <li><span class="text-gray-400">/</span></li>
+                    <li id="breadcrumb-product" class="text-gray-900 font-medium">Product</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Product Images -->
+            <div class="space-y-4">
+                <div class="product-image-main" id="main-image">
+                    <img src="" alt="" id="main-image-src">
+                </div>
+                
+                <div class="flex space-x-4" id="thumbnail-container">
+                    <!-- Thumbnails will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Product Information -->
+            <div class="space-y-6">
+                <div>
+                    <div class="flex items-center gap-2 mb-4" id="product-badges">
+                        <!-- Badges will be populated by JavaScript -->
+                    </div>
+                    
+                    <h1 class="font-display text-4xl font-bold mb-4" id="product-title">Loading...</h1>
+                    
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="text-2xl font-bold" id="product-price">$0.00</span>
+                        <span class="text-sm text-gray-500" id="product-sku">SKU: </span>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <p class="text-gray-600" id="product-description">Loading product description...</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="font-semibold mb-3">Vendor</h3>
+                        <div class="flex items-center gap-2">
+                            <span id="vendor-name" class="font-medium">Loading...</span>
+                            <span class="text-sm text-gray-500" id="vendor-type">(Official)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Variant Selection -->
+                <div class="space-y-6" id="variant-section">
+                    <div>
+                        <h3 class="font-semibold mb-3">Size</h3>
+                        <div class="variant-selector" id="size-selector">
+                            <!-- Size options will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stock Status -->
+                <div class="stock-indicator">
+                    <div class="stock-dot" id="stock-dot"></div>
+                    <span id="stock-text">Loading stock status...</span>
+                </div>
+
+                <!-- Quantity and Actions -->
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-semibold mb-3">Quantity</h3>
+                        <div class="quantity-selector">
+                            <button class="quantity-btn" id="qty-minus">-</button>
+                            <input type="number" class="quantity-input" id="quantity" value="1" min="1" max="10">
+                            <button class="quantity-btn" id="qty-plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="btn-primary px-8 py-4 rounded-none font-semibold text-lg flex-1" id="add-to-cart">
+                            Add to Cart
+                        </button>
+                        <button class="btn-secondary px-8 py-4 rounded-none font-semibold text-lg flex-1" id="buy-now">
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="border-t pt-6 space-y-4">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Free shipping on orders over $100</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>30-day return policy</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                        <span>Secure payment processing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Description -->
+        <div class="mt-16 border-t pt-16">
+            <h2 class="font-display text-3xl font-bold mb-8">Product Description</h2>
+            <div class="prose prose-lg max-w-none" id="detailed-description">
+                <!-- Detailed description will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <div class="mt-16 border-t pt-16">
+            <h2 class="font-display text-3xl font-bold mb-8">Related Products</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="related-products">
+                <!-- Related products will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+<footer class="bg-black text-white py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+        <h2 class="font-display text-3xl font-semibold tracking-wide mb-3">
+            ATELIER YAS MARINA
+        </h2>
+
+        <p class="text-gray-400 text-sm mb-2">
+            © <span id="footer-year"></span> Atelier Yas Marina. All rights reserved.
+        </p>
+
+        <p class="text-gray-500 text-xs opacity-80">
+            Prototype for demonstration purposes
+        </p>
+
+    </div>
+</footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATELIER YAS MARINA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link href="https://unpkg.com/splitting@1.0.6/dist/splitting.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <!-- Elegant Dior-like typography -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Libre+Baskerville:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --accent-black: #1A1A1A;
+            --formula-red: #DC143C;
+            --neutral-gray: #6C757D;
+        }
+        
+
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-white);
+            color: var(--accent-black);
+        }
+        
+        .font-display{
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  letter-spacing: 0.02em;
+  line-height:1.02;
+  font-weight:600;
+  text-transform: none;
+  -webkit-font-feature-settings: "ss01" on;
+}
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.3) 0%, rgba(220, 20, 60, 0.1) 100%);
+        }
+        
+        .particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .content-layer {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--primary-white);
+            border: 1px solid rgba(108, 117, 125, 0.1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .btn-primary {
+            background: var(--accent-black);
+            color: var(--primary-white);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--formula-red);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 20, 60, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--primary-white);
+            color: var(--accent-black);
+            border: 2px solid var(--accent-black);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--accent-black);
+            color: var(--primary-white);
+            transform: translateY(-2px);
+        }
+        
+        .benefit-card {
+            background: var(--light-gray);
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sticky-nav {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .cart-counter {
+            background: var(--formula-red);
+            color: white;
+            font-size: 0.75rem;
+            min-width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .hero-image {
+            background-image: url('resources/hero-bg.gif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-image {
+                background-attachment: scroll;
+            }
+        }
+
+        :root{
+  --bg:#ffffff;
+  --text:#0b0b0b;
+  --muted:#6b6b6b;
+  --accent-deep:#0a0a0a;    /* strong black */
+  --accent-gold:#bfa86a;    /* subtle couture gold */
+  --muted-2:#f3f2ef;
+  --glass: rgba(255,255,255,0.96);
+}
+
+/* Base */
+html,body{
+  margin:0; padding:0; height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.6;
+  -webkit-font-feature-settings: "liga" 1;
+}
+
+/* Display headings — couture */
+.font-display{
+  font-family: 'Cormorant Garamond', 'Libre Baskerville', serif;
+  letter-spacing: 0.02em;
+  line-height:1.02;
+  font-weight:600;
+  text-transform: none;
+}
+
+/* Hairline uppercase kicker */
+.kicker {
+  font-family: 'Inter';
+  font-size:0.78rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* Headings */
+h1.font-display { font-size:2.8rem; margin:0 0 .6rem 0; }
+h2.font-display { font-size:1.8rem; margin:0 0 .5rem 0; }
+h3.font-display { font-size:1.25rem; margin:0 0 .5rem 0; }
+
+/* Paragraphs */
+p { margin:0 0 1rem 0; font-size:1rem; }
+
+/* Brand/logo */
+.brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight:600;
+  letter-spacing:0.06em;
+  font-size:1.15rem;
+}
+
+/* Buttons — couture style (rounded + glass hover) */
+.btn-primary{
+  background: var(--accent-deep);
+  color: #fff;
+  padding: .85rem 1.1rem;
+  font-weight:600;
+  border-radius: 6px; /* rounded */
+  border: none;
+  box-shadow: 0 6px 20px rgba(10,10,10,0.10);
+  transition: all .18s ease;
+}
+
+.btn-primary:hover{
+  transform: translateY(-3px);
+  background: var(--accent-deep); /* tetap solid, tidak transparan */
+  color: #fff;
+
+  /* glassy grey shadow */
+  box-shadow: 
+    0 10px 30px rgba(90, 90, 90, 0.18),
+    0 2px 6px rgba(140,140,140,0.12);
+
+  /* subtle glass overlay */
+  backdrop-filter: blur(4px);
+}
+
+/* Secondary outlined — rounded + glass hover */
+.btn-secondary{
+  background: transparent;
+  color: var(--primary-black);
+  border: 1px solid rgba(11,11,11,0.12);
+  padding:.75rem 1.05rem;
+  font-weight:500;
+  border-radius: 6px; /* rounded */
+  transition: all .18s ease;
+}
+
+.btn-secondary:hover{
+  background: rgba(5, 5, 5, 0.35); /* subtle glass */
+  backdrop-filter: blur(4px);
+  color: var(--primary-white);
+  
+  box-shadow:
+    0 8px 26px rgba(100,100,100,0.18),
+    0 2px 6px rgba(140,140,140,0.10);
+}
+
+
+/* Product cards — softer, taller */
+.product-card {
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fff, #fff);
+  box-shadow: 0 12px 36px rgba(12,12,12,0.04);
+  overflow: hidden;
+}
+
+/* Hero tweaks */
+.hero-image { background-size:cover; background-position:center; min-height:80vh; }
+.hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.32), rgba(10,10,10,0.2)); }
+
+/* Badges */
+.badge {
+  display:inline-block;
+  padding: 6px 8px;
+  border-radius: 999px;
+  font-size: .72rem;
+  background: rgba(11,11,11,0.03);
+  color: var(--accent-deep);
+  border: 1px solid rgba(11,11,11,0.04);
+}
+
+/* Footer */
+footer { background:#0f1112; color: #d8d6d2; }
+footer .brand { color:var(--accent-gold); }
+
+/* Small screens: scale headings */
+@media (max-width:768px){
+  h1.font-display { font-size:2.2rem; }
+  h2.font-display { font-size:1.6rem; }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="sticky-nav fixed top-0 left-0 right-0 z-50 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="font-display text-2xl font-bold">
+                    ATELIER YAS MARINA
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-900 hover:text-red-600 transition-colors font-medium">Home</a>
+                    <a href="catalog.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium">Catalog</a>
+                    <a href="cart.html" class="text-gray-700 hover:text-red-600 transition-colors font-medium relative">
+                        Cart
+                        <span id="cart-counter" class="cart-counter absolute -top-2 -right-2 rounded-full flex items-center justify-center hidden">0</span>
+                    </a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-red-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-2 space-y-2">
+                <a href="index.html" class="block py-2 text-gray-900 font-medium">Home</a>
+                <a href="catalog.html" class="block py-2 text-gray-700">Catalog</a>
+                <a href="cart.html" class="block py-2 text-gray-700">Cart</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-image min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div id="particle-container" class="particle-canvas"></div>
+        <div class="hero-bg absolute inset-0"></div>
+        
+        <div class="content-layer text-center text-white max-w-4xl mx-auto px-4">
+            <h1 class="font-display text-5xl md:text-7xl font-bold mb-6">
+                <span id="typed-headline"></span>
+            </h1>
+        
+          <p class="text-lg mb-5 max-w-2xl mx-auto opacity-90 leading-relaxed">
+    Discover authentic Formula 1 merchandise from <br> official teams
+    and independent creators
+</p>
+
+<div class="flex flex-col sm:flex-row gap-3 justify-center">
+    <a href="catalog.html?channel=official" 
+       class="btn-primary px-5 py-2 font-semibold tracking-wide text-sm inline-block">
+        Explore Official
+    </a>
+    <a href="catalog.html?channel=creator" 
+       class="btn-secondary px-5 py-2 font-semibold tracking-wide text-sm inline-block">
+        Explore Creator
+    </a>
+</div>
+
+
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Why Choose Us</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">The premier destination for Formula 1 merchandise, connecting fans with authentic team gear and exclusive creator designs.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="benefit-card p-8 rounded-lg text-center reveal-element">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold mb-4">Verified Official</h3>
+                    <p class="text-gray-600">100% authentic merchandise from official F1 teams</p>
+                </div>
+                
+                <div class="benefit-card p-8 rounded-lg text-center reveal-element">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold mb-4">Curated Creator Drops</h3>
+                    <p class="text-gray-600">Exclusive designs from talented F1 fan artists</p>
+                </div>
+                
+                <div class="benefit-card p-8 rounded-lg text-center reveal-element">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold mb-4">Secure Checkout</h3>
+                    <p class="text-gray-600">Multiple payment options with buyer protection</p>
+                </div>
+                
+                <div class="benefit-card p-8 rounded-lg text-center reveal-element">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold mb-4">Fast Shipping</h3>
+                    <p class="text-gray-600">Worldwide delivery with tracking</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Featured Products</h2>
+                <p class="text-xl text-gray-600">Discover our most popular items from both official teams and talented creators</p>
+            </div>
+            
+            <div id="featured-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Products will be loaded here by JavaScript -->
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="catalog.html" class="btn-primary px-3 py-2  font-semibold text-lg inline-block" >
+                    View All Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+<footer class="bg-black text-white py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+        <h2 class="font-display text-3xl font-semibold tracking-wide mb-3">
+            ATELIER YAS MARINA
+        </h2>
+
+        <p class="text-gray-400 text-sm mb-2">
+            © <span id="footer-year"></span> Atelier Yas Marina. All rights reserved.
+        </p>
+
+        <p class="text-gray-500 text-xs opacity-80">
+            Prototype for demonstration purposes
+        </p>
+
+    </div>
+</footer>
+
+<script>
+    // Auto-year
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
+</script>
+
+
+    <script src="main.js"></script>
+</body>
+</html>
