@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # 1. Database Service
+  mongo:
+    image: mongo:latest
+    container_name: f1_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db # Agar data tidak hilang saat docker dimatikan
+
+  # 2. Backend Service
+  backend:
+    build: ./backend
+    container_name: f1_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/f1marketplace # Koneksi ke service 'mongo'
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend/uploads:/app/uploads # Agar gambar upload tersimpan di laptop juga
+
+  # 3. Frontend Service
+  frontend:
+    build: .
+    container_name: f1_frontend
+    ports:
+      - "8080:80" # Akses di browser lewat localhost:8080
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:

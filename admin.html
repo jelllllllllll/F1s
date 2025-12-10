@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ATELIER YAS MARINA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8F9FA; }
+        .font-display { font-family: 'Playfair Display', serif; }
+        /* Style untuk Tab */
+        .tab-btn {
+            padding-bottom: 1rem;
+            color: #6C757D;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active {
+            color: #1A1A1A;
+            font-weight: 700;
+            border-color: #1A1A1A;
+        }
+    </style>
+</head>
+<body>
+    <nav class="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="font-display text-2xl font-bold">ATELIER ADMIN</div>
+            <div class="flex gap-4">
+                <button onclick="seedDatabase()" class="text-sm text-blue-600 hover:text-blue-800 font-semibold border border-blue-600 px-4 py-2 rounded transition hover:bg-blue-50">
+                    Seed Database (Reset)
+                </button>
+                <a href="index.html" class="text-sm text-gray-600 hover:text-black flex items-center px-4 py-2">
+                    Back to Site
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="flex space-x-8 mb-8 border-b border-gray-200">
+            <button id="btn-tab-orders" class="tab-btn active" onclick="switchTab('orders')">Incoming Orders</button>
+            <button id="btn-tab-products" class="tab-btn" onclick="switchTab('products')">Manage Products</button>
+        </div>
+
+        <div id="section-orders">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-display text-3xl font-bold">Customer Orders</h2>
+                <button onclick="loadOrders()" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded transition">Refresh Data</button>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                            <th class="p-4 font-semibold text-sm text-gray-600 w-24">Order ID</th>
+                            <th class="p-4 font-semibold text-sm text-gray-600 w-48">Customer Info</th>
+                            <th class="p-4 font-semibold text-sm text-gray-600 w-64">Shipping Address</th> <th class="p-4 font-semibold text-sm text-gray-600 w-32">Items</th>
+                            <th class="p-4 font-semibold text-sm text-gray-600 w-32">Total</th>
+                            <th class="p-4 font-semibold text-sm text-gray-600 w-24">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <tr><td colspan="6" class="p-8 text-center text-gray-400">Loading orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="section-products" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="lg:col-span-1">
+                    <div class="bg-white p-6 rounded-lg shadow border border-gray-100 sticky top-24">
+                        <h2 class="font-display text-xl font-bold mb-4">Add New Product</h2>
+                        <form id="add-product-form" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Title</label>
+                                <input type="text" name="title" class="w-full border p-2 rounded text-sm" required placeholder="Product Name">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Price ($)</label>
+                                    <input type="number" name="price" step="0.01" class="w-full border p-2 rounded text-sm" required placeholder="0.00">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Team</label>
+                                    <select name="team" class="w-full border p-2 rounded text-sm">
+                                        <option value="Ferrari">Ferrari</option>
+                                        <option value="Mercedes">Mercedes</option>
+                                        <option value="Red Bull Racing">Red Bull</option>
+                                        <option value="McLaren">McLaren</option>
+                                        <option value="Aston Martin">Aston Martin</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Type & Category</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <select name="vendor_type" class="w-full border p-2 rounded text-sm">
+                                        <option value="official">Official</option>
+                                        <option value="creator">Creator</option>
+                                    </select>
+                                    <select name="category" class="w-full border p-2 rounded text-sm">
+                                        <option value="apparel">Apparel</option>
+                                        <option value="accessories">Accessories</option>
+                                        <option value="collectibles">Collectibles</option>
+                                        <option value="art">Art</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Image</label>
+                                <input type="file" name="image" id="product-image" class="w-full border p-2 rounded text-sm" accept="image/*" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Description</label>
+                                <textarea name="description" rows="2" class="w-full border p-2 rounded text-sm"></textarea>
+                            </div>
+                            <button type="submit" class="bg-black text-white w-full py-3 rounded font-bold text-sm hover:bg-gray-800 transition">
+                                + Add to Catalog
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="font-display text-xl font-bold">Current Catalog</h2>
+                        <button onclick="loadProducts()" class="text-xs text-blue-600 hover:underline">Refresh List</button>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow border border-gray-100 overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="p-3 text-xs font-bold text-gray-500 uppercase">Image</th>
+                                    <th class="p-3 text-xs font-bold text-gray-500 uppercase">Product Name</th>
+                                    <th class="p-3 text-xs font-bold text-gray-500 uppercase">Price</th>
+                                    <th class="p-3 text-xs font-bold text-gray-500 uppercase text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="product-list-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. LOGIC TAB (YANG SUDAH DIPERBAIKI AGAR STAY) ---
+        function switchTab(tabName) {
+            // Simpan posisi tab di LocalStorage browser
+            localStorage.setItem('activeAdminTab', tabName);
+
+            const ordersSection = document.getElementById('section-orders');
+            const productsSection = document.getElementById('section-products');
+            const btnOrders = document.getElementById('btn-tab-orders');
+            const btnProducts = document.getElementById('btn-tab-products');
+
+            // Reset semua class
+            ordersSection.classList.add('hidden');
+            productsSection.classList.add('hidden');
+            btnOrders.classList.remove('active');
+            btnProducts.classList.remove('active');
+
+            // Aktifkan yang dipilih
+            if (tabName === 'orders') {
+                ordersSection.classList.remove('hidden');
+                btnOrders.classList.add('active');
+                loadOrders(); 
+            } else {
+                productsSection.classList.remove('hidden');
+                btnProducts.classList.add('active');
+                loadProducts();
+            }
+        }
+
+        // Jalankan saat halaman dibuka: Cek tab terakhir
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTab = localStorage.getItem('activeAdminTab') || 'orders';
+            switchTab(savedTab);
+        });
+
+        // --- 2. LOAD ORDERS (VERSI LENGKAP ALAMAT) ---
+        async function loadOrders() {
+            try {
+                const res = await fetch('http://localhost:3000/api/orders');
+                if(!res.ok) throw new Error("Gagal connect ke Backend");
+                const orders = await res.json();
+                const tbody = document.getElementById('orders-table-body');
+                tbody.innerHTML = '';
+
+                if(orders.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-gray-500">Belum ada pesanan masuk.</td></tr>';
+                    return;
+                }
+
+                orders.forEach(order => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition align-top';
+                    const totalFormatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(order.totalAmount || 0);
+                    
+                    // Detail Alamat Lengkap
+                    const addressHtml = `
+                        <div class="text-sm font-medium text-gray-800">${order.customer.address}</div>
+                        <div class="text-xs text-gray-500">${order.customer.city}, ${order.customer.state} ${order.customer.zip}</div>
+                        <div class="text-xs text-gray-500 font-bold mt-1">${order.customer.country}</div>
+                    `;
+
+                    // Info Customer + No HP
+                    const customerHtml = `
+                        <div class="font-bold text-gray-900">${order.customer.fullName}</div>
+                        <div class="text-xs text-gray-500">${order.customer.email}</div>
+                        <div class="text-xs text-blue-600 font-mono mt-1">${order.customer.phone}</div>
+                    `;
+
+                    // Info Items
+                    const itemSummary = order.items.map(i => `<div class="text-xs text-gray-600 truncate w-32">• ${i.quantity}x ...</div>`).join('').slice(0, 100); 
+                    const itemCount = order.items ? order.items.reduce((acc, item) => acc + item.quantity, 0) : 0;
+
+                    tr.innerHTML = `
+                        <td class="p-4 font-mono text-xs text-gray-500 pt-5">${order.orderNumber}</td>
+                        <td class="p-4 pt-5">${customerHtml}</td>
+                        <td class="p-4 pt-5 bg-gray-50/50">${addressHtml}</td>
+                        <td class="p-4 text-sm pt-5">
+                            <span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">${itemCount} Items</span>
+                            <div class="mt-2 text-xs text-gray-400">${order.shippingMethod}</div>
+                        </td>
+                        <td class="p-4 font-bold text-gray-900 pt-5">${totalFormatted}</td>
+                        <td class="p-4 pt-5">
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded font-bold">Paid</span>
+                            <div class="text-xs text-gray-400 mt-1 uppercase">${order.paymentMethod}</div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById('orders-table-body').innerHTML = '<tr><td colspan="6" class="p-4 text-center text-red-500">Error loading data.</td></tr>';
+            }
+        }
+
+        // --- 3. LOAD PRODUCTS ---
+        async function loadProducts() {
+            try {
+                const res = await fetch('http://localhost:3000/api/products');
+                const products = await res.json();
+                const tbody = document.getElementById('product-list-body');
+                tbody.innerHTML = '';
+
+                if(products.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-500">Katalog kosong.</td></tr>';
+                    return;
+                }
+
+                products.forEach(p => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-gray-100 hover:bg-gray-50';
+                    const imgUrl = p.images && p.images.length > 0 ? p.images[0] : 'https://via.placeholder.com/50';
+                    
+                    tr.innerHTML = `
+                        <td class="p-3"><img src="${imgUrl}" class="w-10 h-10 object-cover rounded border bg-white"></td>
+                        <td class="p-3">
+                            <div class="text-sm font-bold text-gray-900 line-clamp-1">${p.title}</div>
+                            <div class="text-xs text-gray-500 capitalize">${p.team} • ${p.category}</div>
+                        </td>
+                        <td class="p-3 text-sm font-mono font-medium">$${p.price}</td>
+                        <td class="p-3 text-right">
+                            <button onclick="deleteProduct('${p.id}')" class="text-xs bg-white border border-red-200 text-red-600 px-3 py-1 rounded hover:bg-red-50 transition">
+                                Delete
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        // --- 4. ADD PRODUCT ---
+        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const btn = form.querySelector('button');
+            const originalText = btn.textContent;
+
+            btn.textContent = "Uploading...";
+            btn.disabled = true;
+
+            const formData = new FormData();
+            const productData = {
+                title: form.title.value,
+                price: Number(form.price.value),
+                team: form.team.value,
+                vendor_type: form.vendor_type.value,
+                category: form.category.value,
+                description: form.description.value,
+                badges: ["new"],
+                stock_total: 50,
+                variants: [{id: "std", label: "Standard", stock: 50}]
+            };
+
+            formData.append('productData', JSON.stringify(productData));
+            formData.append('image', document.getElementById('product-image').files[0]);
+
+            try {
+                const res = await fetch('http://localhost:3000/api/products', { method: 'POST', body: formData });
+                if (res.ok) { 
+                    alert('✅ Produk ditambahkan!'); 
+                    form.reset(); 
+                    loadProducts(); 
+                    // Kita tidak perlu redirect karena LocalStorage akan menjaga kita tetap di tab ini
+                } else { 
+                    alert('Gagal menambah produk.'); 
+                }
+            } catch (err) { alert('Error: ' + err.message); } 
+            finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // --- 5. DELETE PRODUCT ---
+        async function deleteProduct(id) {
+            if(!confirm("Hapus produk ini dari katalog?")) return;
+            try {
+                const res = await fetch(`http://localhost:3000/api/products/${id}`, { method: 'DELETE' });
+                if(res.ok) loadProducts();
+                else alert("Gagal menghapus.");
+            } catch (err) { alert(err.message); }
+        }
+
+        // --- 6. SEED ---
+        async function seedDatabase() {
+            if(!confirm("Reset Database?")) return;
+            try {
+                const res = await fetch('products.json');
+                const data = await res.json();
+                await fetch('http://localhost:3000/api/seed', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                alert("✅ Database Reset!");
+                loadProducts();
+            } catch (err) { alert("Error: " + err.message); }
+        }
+    </script>
+</body>
+</html>
