@@ -18,7 +18,7 @@ RUN npm install
 COPY backend/. .
 
 # ---- AKHIR PERBAIKAN ----
-
+RUN mkdir -p uploads && chmod -R 777 uploads
 # Buka port 3000
 EXPOSE 3000
 
