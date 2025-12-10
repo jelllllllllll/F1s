@@ -192,7 +192,7 @@
         // --- 2. LOAD ORDERS (VERSI LENGKAP ALAMAT) ---
         async function loadOrders() {
             try {
-                const res = await fetch('http://localhost:3000/api/orders');
+                const res = await fetch('https://f1s-production.up.railway.app/api/orders');
                 if(!res.ok) throw new Error("Gagal connect ke Backend");
                 const orders = await res.json();
                 const tbody = document.getElementById('orders-table-body');
@@ -251,7 +251,7 @@
         // --- 3. LOAD PRODUCTS ---
         async function loadProducts() {
             try {
-                const res = await fetch('http://localhost:3000/api/products');
+                const res = await fetch('https://f1s-production.up.railway.app/api/products');
                 const products = await res.json();
                 const tbody = document.getElementById('product-list-body');
                 tbody.innerHTML = '';
@@ -311,7 +311,7 @@
             formData.append('image', document.getElementById('product-image').files[0]);
 
             try {
-                const res = await fetch('http://localhost:3000/api/products', { method: 'POST', body: formData });
+                const res = await fetch('https://f1s-production.up.railway.app/api/products', { method: 'POST', body: formData });
                 if (res.ok) { 
                     alert('✅ Produk ditambahkan!'); 
                     form.reset(); 
@@ -331,7 +331,7 @@
         async function deleteProduct(id) {
             if(!confirm("Hapus produk ini dari katalog?")) return;
             try {
-                const res = await fetch(`http://localhost:3000/api/products/${id}`, { method: 'DELETE' });
+                const res = await fetch(`https://f1s-production.up.railway.app/api/products/${id}`, { method: 'DELETE' });
                 if(res.ok) loadProducts();
                 else alert("Gagal menghapus.");
             } catch (err) { alert(err.message); }
@@ -343,7 +343,7 @@
             try {
                 const res = await fetch('products.json');
                 const data = await res.json();
-                await fetch('http://localhost:3000/api/seed', {
+                await fetch('https://f1s-production.up.railway.app/api/seed', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(data)
