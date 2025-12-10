@@ -27,7 +27,7 @@ const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/f1marketpla
 mongoose.connect(mongoURI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.log('❌ MongoDB Error:', err));
-  
+
 // --- SETUP UPLOAD ---
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -80,16 +80,22 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
   }
 });
 
-// 4. SEED DATABASE
+// 4. SEED DATABASE (REVISI: HAPUS PRODUK & ORDER)
 app.post('/api/seed', async (req, res) => {
   try {
-    const count = await Product.countDocuments();
-    if (count > 0) {
-      await Product.deleteMany({});
-    }
+    console.log("Resetting Database...");
+
+    // 1. Hapus SEMUA Produk lama
+    await Product.deleteMany({});
+    
+    // 2. Hapus SEMUA Order lama (TAMBAHAN BARU)
+    await Order.deleteMany({});
+
+    // 3. Masukkan Produk Default baru
     const productsJson = req.body;
     await Product.insertMany(productsJson);
-    res.json({ message: "Database berhasil diisi dengan " + productsJson.length + " produk!" });
+
+    res.json({ message: "Database Total Reset! Semua Produk & Order telah dihapus." });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
