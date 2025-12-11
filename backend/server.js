@@ -1,17 +1,15 @@
 const express = require('express');
-const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const path = require('path');
+const path = require('path'); // HANYA SATU KALI DECLARE DISINI
 
 // Import Models
 const Product = require('./models/Product');
 const Order = require('./models/Order');
 
 const app = express();
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const PORT = 3000;
 
 // Middleware
@@ -19,24 +17,25 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Setup Folder Static
+// --- SETUP FOLDER STATIC (PENTING UNTUK GAMBAR) ---
+// Menggunakan path.join agar aman di Docker Railway
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// --- KONEKSI MONGODB (Update untuk Docker) ---
-// Gunakan environment variable atau default ke localhost (untuk testing tanpa docker)
+// --- KONEKSI MONGODB ---
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/f1marketplace';
 
 mongoose.connect(mongoURI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.log('❌ MongoDB Error:', err));
 
-// --- SETUP UPLOAD ---
+// --- SETUP MULTER (UPLOAD) ---
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, 'uploads/') // Pastikan folder ini ada (sudah dibuat via Dockerfile)
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname)
+    // Tambah timestamp biar nama file unik
+    cb(null, Date.now() + '-' + file.originalname.replace(/\s+/g, '-'));
   }
 });
 const upload = multer({ storage: storage });
@@ -63,8 +62,16 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
   try {
     const data = JSON.parse(req.body.productData);
     let imagePath = '';
+
+    // --- FIX PENTING: URL GAMBAR DINAMIS ---
+    // Jika di Railway, ini akan jadi https://f1s.../uploads/..
+    // Jika di Local, ini akan jadi http://localhost:3000/uploads/..
+    const protocol = req.protocol;
+    const host = req.get('host');
+    const fullUrl = `${protocol}://${host}`;
+
     if (req.file) {
-      imagePath = `http://localhost:${PORT}/uploads/${req.file.filename}`;
+      imagePath = `${fullUrl}/uploads/${req.file.filename}`;
     } else if (data.images && data.images.length > 0) {
       imagePath = data.images[0];
     }
@@ -78,22 +85,18 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
     await newProduct.save();
     res.status(201).json(newProduct);
   } catch (err) {
+    console.error(err);
     res.status(400).json({ message: err.message });
   }
 });
 
-// 4. SEED DATABASE (REVISI: HAPUS PRODUK & ORDER)
+// 4. SEED DATABASE
 app.post('/api/seed', async (req, res) => {
   try {
     console.log("Resetting Database...");
-
-    // 1. Hapus SEMUA Produk lama
     await Product.deleteMany({});
-    
-    // 2. Hapus SEMUA Order lama (TAMBAHAN BARU)
     await Order.deleteMany({});
-
-    // 3. Masukkan Produk Default baru
+    
     const productsJson = req.body;
     await Product.insertMany(productsJson);
 
@@ -124,11 +127,10 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
-// 7. DELETE PRODUCT (FITUR BARU)
+// 7. DELETE PRODUCT
 app.delete('/api/products/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        // Hapus berdasarkan field 'id' string buatan kita, bukan _id mongo
         const deleted = await Product.findOneAndDelete({ id: id });
         
         if (!deleted) {
@@ -141,5 +143,5 @@ app.delete('/api/products/:id', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
+  console.log(`🚀 Server berjalan di Port ${PORT}`);
 });
