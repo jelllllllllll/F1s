@@ -10,6 +10,7 @@ const Product = require('./models/Product');
 const Order = require('./models/Order');
 
 const app = express();
+app.use('/uploads', express.static('uploads'));
 const PORT = 3000;
 
 // Middleware
