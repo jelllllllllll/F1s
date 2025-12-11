@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -10,7 +11,7 @@ const Product = require('./models/Product');
 const Order = require('./models/Order');
 
 const app = express();
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const PORT = 3000;
 
 // Middleware
